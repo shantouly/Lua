@@ -19,7 +19,7 @@
           end
       end  
 #### iparis和paris  
-    iparis -- 不能找到0和0一下的自定义索引的内容，如果从1开始 索引不是连续的话，后面的内容也会找不到  
+    iparis -- 不能找到0和0以下的自定义索引的内容，如果从1开始 索引不是连续的话，后面的内容也会找不到  
     pairs -- 建议用来遍历各种不规则的表，它可以得到所有信息  
       
     用iparis遍历数组：  
@@ -30,6 +30,13 @@
     -- 用paris遍历自定义索引会把所有的键值遍历出来，不管是不是小于等于0  
     for i,k in pairs(a) do  
         print(i.."_"..k)  
+    end  
+
+    用paris遍历字典：  
+    a = {["name"] = "Ly",["age"] = 14,["1"] = 1}  
+    -- 使用paris  
+    for _,k in pairs(a) do  
+        print(_, k)  
     end  
       
       
