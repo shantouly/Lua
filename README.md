@@ -38,5 +38,85 @@
     for _,k in pairs(a) do  
         print(_, k)  
     end  
+#### Function  
+    两种申明方式：一个在Fcuntion后面取名字；一个不去名字，用一个变量来存储  
+    1:) function func()  
+    ....  
+    end  
+    2:) f1 = function ()  
+        ...  
+        end  
+    函数的传参：个数传多了或者传少了都不会报错；多了会进行丢弃，少了则会补空  
+    函数的返回值：可以有多个返回值；外部用多个变量来接取，接少接多都不影响；少了就丢弃；多了就补空  
+    函数的type：Function  
+    lua中不支持函数的重载  
+    lua中的边长参数： -> ... 来申明，先用表接然后再进行使用  
+    函数的嵌套：就是函数里面申明函数；闭包，改变了变量的生命周期  
+#### lua中封装  
+     封装:
+        表就是表现类的一种形式  
+        实现了new方法本质上是创建了一个空表，设置了一个元表，使用__index来指向自己  
+        修改创建出来的对象的属性变量时，返回出来的空表对象新建了一个成员属性（变量）  
+        冒号：self代表函数调用者，表里面要有对应的self函数才行，普通函数是不能这样调用的  
+        Object = {}  
+        function Object:new()  
+            local obj = {}  
+            self.__index = self  
+            setmetatable(obj,self)  
+            return obj  
+        end  
+#### lua中的继承  
+    function Object:subClass(className)  
+        _G[className] = {}  
+        local obj = _G[className]  
+        obj.base = self  
+        self.__index = self  
+        setmetatable(obj,self)  
+    end  
+#### lua中的多态  
+    -- 申明一个新的类  
+    Object:SubClass("GameObject")  
+    -- 成员变量  
+    GameObject.posX = 0  
+    GameObject.posY = 0  
+      
+    -- 成员方法  
+    function GameObject:Move()  
+        self.posX = self.posX + 1  
+        self.posY = self.posY + 1  
+    end  
+      
+    -- 实例化对象使用  
+    local obj = GameObject:new()  
+    print(obj.posX)  
+    obj:Move()  
+    obj:Move()  
+    print(obj.posX)  
+    obj:Move()  
+      
+    local obj1 = GameObject:new()  
+    print(obj1.posX)  
+    obj1:Move()  
+    print(obj1.posX)  
+      
+    -- 申明一个新的类 Player 继承 GameObject  
+    GameObject:SubClass("Player")  
+    -- 多态 重写了 GameObject的Move方法  
+    function Player:Move()  
+        self.base.Move(self)  
+    end  
+      
+    -- 实例化Player对象  
+    print("------------------------------------")  
+    local p1 = Player:new()  
+    print(p1.posX)  
+    p1:Move()  
+    print(p1.posX)  
+      
+    local p2 = Player:new()  
+    print(p2.posX)  
+    p2:Move()  
+    print(p2.posX)  
+    
       
       
