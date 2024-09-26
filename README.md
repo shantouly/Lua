@@ -117,6 +117,46 @@
     print(p2.posX)  
     p2:Move()  
     print(p2.posX)  
+#### lua中的垃圾回收  
+    test =     {id = 1,name = "1234"}  
+    -- 垃圾回收关键字  
+    -- collectgarbage  
+    -- 获取当前lua占用内存数 k字节 用返回值*1024 就可以得到具体的内存占用字节数  
+    print(collectgarbage("count")  
+    -- 对当前的程序进行垃圾回收  
+    collectgarbage("collect")  
+    print(collectgarbage("count")  
+    进行了垃圾回收之后，再调用collect时，打印出来的值应该会有所减少的  
+#### lua中的协程  
+    1:) 协程的创建  
+    func = function()  
+        print(123)  
+    end  
+    co = coroutine.create(func) -- 这个的返回值类型是thread  
+    co1 = coroutine.wrap(func) -- 这个的返回值类型是function  
+    2:) 协程的挂起  
+    fun2 = function()  
+     loacl i = 1  
+     while true do  
+         print(i)  
+         i = i + 1  
+         coroutine.yield()  
+    end  
+    end  
+    这个跟c#的是类似的  
+#### 协程的状态  
+    coroutine.status(协程对象) --- 调用方式,参数不能是协程函数，只能是协程对象(用create创建的)  
+    dead --- 结束  
+    suspended --- 暂停  
+    running --- 进行中  
+    normal --- 活动但是没有运行  
+    coroutine.running() --- 可以获取当前正在进行中的协程对象  
+  
+    -- 协程的执行  
+    co = coroutine.create(function) --> coroutine.resume(co)  
+  
+    co1 = coroutine.warp(function) --> co1()  
+    
     
       
       
