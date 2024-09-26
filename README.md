@@ -156,6 +156,30 @@
     co = coroutine.create(function) --> coroutine.resume(co)  
   
     co1 = coroutine.warp(function) --> co1()  
+#### lua中的本地变量和全局变量  
+    在lua中，没有在变量前面加上local的都是全局变量，即使是在function中定义的变量
+#### lua中的多脚本执行（在使用require来调用其他的lua脚本时，当我调用之后，是可以使用另一个脚本中的全局变量的。但是本地变量无法使用）  
+    Test.lua:  
+    print("Test测试")  
+    testA = 123  
+    local testLocalA = 321  
+      
+    return testLocalA -- 这里，脚本也可以返回自己的一个本地变量，但是在其他lua脚本中接收的时候只能接收一个变量。  
+    -- 例子；local a = require("Test")  
+
+    require.lua  
+    require("Test")  
+    print(testA)  
+    print(testlocalA)  -- 这个是打印不出来的  
+#### 脚本状态的查看，卸载和大G表  
+    package.Load["Test"] -- 返回这个脚本是否被加载  
+    package.load["Test"] = nil -- 将这个脚本进行卸载  
+    tips:当我require了一次脚本之后，再执行require语句是不会将这个脚本再加载一次的  
+    _G -- _G表是一个总表(table) 他将我们申明的所有全局的变量都存储再其中(只存储全局变量)  
+    -- 这里，如果我没有require另一个lua脚本的话，那么此时遍历这个大G表是不会出现另一个脚本的全局变量的  
+    for key,value in paris(_G) do  
+        print(key,value)  
+    end  
     
     
       
